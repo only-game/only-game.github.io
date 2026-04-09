@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-FV97WQ759M"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-FV97WQ759M');
+  </script>
+
+  <!-- =============================================
+       WEEGOO ADS - WGPlayer Universal Tag
+       Apna tag neeche paste karein (Weegoo se mila hoga)
+  ================================================ -->
+  <script type="text/javascript" async>
+    !function(e,t){
+      a=e.createElement("script"),
+      m=e.getElementsByTagName("script")[0],
+      a.async=1,
+      a.src=t,
+      m.parentNode.insertBefore(a,m)
+    }(document,"https://universal.wgplayer.com/tag/?lh="+window.location.hostname+"&wp="+window.location.pathname+"&ws="+window.location.search);
+  </script>
+  <!-- ============================================= -->
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Play Game | Only Games</title>
+  <link rel="icon" type="image/x-icon" href="games-site-logo.png" />
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: #1a1a2e;
+      font-family: Arial, sans-serif;
+      color: #fff;
+    }
+
+    /* ---- PREROLL OVERLAY ---- */
+    #preroll-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #1a1a2e;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    #preroll-overlay h2 {
+      font-size: 1.4rem;
+      color: #ccc;
+    }
+
+    /* Ad container inside preroll - WeeGoo ad will render here */
+    #preroll-ad-container {
+      width: 640px;
+      max-width: 95vw;
+      min-height: 480px;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    #skip-btn {
+      background: #a83234;
+      color: #fff;
+      border: none;
+      padding: 12px 32px;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      display: none; /* shows after countdown */
+    }
+
+    #skip-btn:hover { background: #c0392b; }
+
+    #countdown-text {
+      font-size: 0.95rem;
+      color: #aaa;
+    }
+
+    /* ---- MAIN GAME LAYOUT ---- */
+    #game-wrapper {
+      display: none; /* hidden until preroll done */
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 10px;
+    }
+
+    #game-topbar {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0;
+      margin-bottom: 8px;
+    }
+
+    #game-topbar a {
+      color: #a83234;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: bold;
+    }
+
+    #game-topbar h1 {
+      font-size: 1.2rem;
+      color: #fff;
+    }
+
+    /* ---- GAME CONTAINER (parent container Weegoo ne manga tha) ---- */
+    #game-container {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    #game-frame-wrapper {
+      flex: 1;
+      background: #000;
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      min-height: 600px;
+    }
+
+    #game-frame {
+      width: 100%;
+      height: 600px;
+      border: none;
+      display: block;
+    }
+
+    /* ---- SIDEBAR ADS ---- */
+    #sidebar-ads {
+      width: 160px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .ad-box {
+      background: #0d0d1a;
+      border: 1px solid #333;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #555;
+      font-size: 0.75rem;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .ad-box-160x600 { width: 160px; height: 600px; }
+
+    /* ---- BOTTOM BANNER AD ---- */
+    #bottom-ad {
+      width: 100%;
+      max-width: 1200px;
+      margin-top: 12px;
+      background: #0d0d1a;
+      border: 1px solid #333;
+      border-radius: 6px;
+      height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #555;
+      font-size: 0.75rem;
+    }
+
+    @media (max-width: 768px) {
+      #sidebar-ads { display: none; }
+      #game-frame { height: 400px; }
+      #game-frame-wrapper { min-height: 400px; }
+      #preroll-ad-container { min-height: 250px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== PREROLL OVERLAY ===== -->
+  <div id="preroll-overlay">
+    <h2>Game loading... please wait</h2>
+
+    <!-- WeeGoo preroll ad renders inside this div -->
+    <div id="preroll-ad-container">
+      <!-- Ad will appear here automatically via WGPlayer tag -->
+    </div>
+
+    <div id="countdown-text">Ad will skip in <span id="timer">5</span> seconds...</div>
+    <button id="skip-btn" onclick="startGame()">▶ Play Now</button>
+  </div>
+
+
+  <!-- ===== MAIN GAME WRAPPER ===== -->
+  <div id="game-wrapper">
+
+    <!-- Navbar -->
+    <div id="navbar-placeholder" style="width:100%;"></div>
+    <script>
+      fetch('header.html')
+        .then(r => r.text())
+        .then(d => { document.getElementById('navbar-placeholder').innerHTML = d; });
+    </script>
+
+    <div id="game-topbar">
+      <a href="index.html">← Back to All Games</a>
+      <h1 id="game-title-display">Loading...</h1>
+      <span></span>
+    </div>
+
+    <div id="game-container">
+
+      <!-- SIDEBAR AD LEFT -->
+      <div id="sidebar-ads">
+        <div class="ad-box ad-box-160x600">
+          <!-- WeeGoo sidebar ad tag yahan lagayein -->
+        </div>
+      </div>
+
+      <!-- GAME IFRAME — parent container -->
+      <div id="game-frame-wrapper">
+        <iframe
+          id="game-frame"
+          src=""
+          allowfullscreen
+          scrolling="no"
+          allow="autoplay; fullscreen *; geolocation; microphone; camera; midi; monetization; xr-spatial-tracking; gamepad; gyroscope; accelerometer; xr"
+        ></iframe>
+      </div>
+
+    </div>
+
+    <!-- BOTTOM BANNER AD -->
+    <div id="bottom-ad">
+      <!-- WeeGoo banner ad tag yahan lagayein -->
+    </div>
+
+  </div><!-- end game-wrapper -->
+
+
+  <script>
+    // ---- URL se game info nikalna ----
+    const params = new URLSearchParams(window.location.search);
+    const gamePath = params.get('path');   // e.g. projects/flappy-bird/index.html
+    const gameTitle = params.get('title'); // e.g. Flappy Bird
+
+    if (gameTitle) {
+      document.title = gameTitle + ' | Only Games';
+      document.getElementById('game-title-display').textContent = gameTitle;
+    }
+
+    // ---- Countdown timer (5 sec) phir skip button show karo ----
+    let seconds = 5;
+    const timerEl = document.getElementById('timer');
+    const skipBtn = document.getElementById('skip-btn');
+    const countdownText = document.getElementById('countdown-text');
+
+    const countdown = setInterval(() => {
+      seconds--;
+      timerEl.textContent = seconds;
+      if (seconds <= 0) {
+        clearInterval(countdown);
+        countdownText.style.display = 'none';
+        skipBtn.style.display = 'inline-block';
+      }
+    }, 1000);
+
+    // ---- Game shuru karo (preroll hatao, iframe load karo) ----
+    function startGame() {
+      document.getElementById('preroll-overlay').style.display = 'none';
+      document.getElementById('game-wrapper').style.display = 'flex';
+
+      if (gamePath) {
+        document.getElementById('game-frame').src = gamePath;
+      } else {
+        document.getElementById('game-frame-wrapper').innerHTML =
+          '<p style="color:#fff;padding:20px;">Game not found. <a href="index.html" style="color:#a83234">Go Back</a></p>';
+      }
+    }
+  </script>
+
+</body>
+</html>
